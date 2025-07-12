@@ -1,13 +1,11 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-
-admin.initializeApp();
 const db = admin.firestore();
 
 //
 // 🚀 saveRecipe(): Save a recipe to Firestore and calculate macros
 //
-exports.saveRecipe = functions.https.onCall(async (data, context) => {
+const saveRecipe = functions.https.onCall(async (data, context) => {
   const { userId, ingredients, recipeName } = data;
 
   if (!userId || !ingredients || ingredients.length === 0 || !recipeName) {
@@ -29,7 +27,7 @@ exports.saveRecipe = functions.https.onCall(async (data, context) => {
 //
 // 🍽️ logMeal(): Log a meal and update daily macro totals
 //
-exports.logMeal = functions.https.onCall(async (data, context) => {
+const logMeal = functions.https.onCall(async (data, context) => {
   const { userId, mealMacros, date } = data;
 
   if (!userId || !mealMacros || !date) {
@@ -60,7 +58,7 @@ exports.logMeal = functions.https.onCall(async (data, context) => {
 //
 // 🏋️ generateWorkout(): Return a personalized workout plan
 //
-exports.generateWorkout = functions.https.onCall((data, context) => {
+const generateWorkout = functions.https.onCall((data, context) => {
   const { fitnessGoal, level, equipment } = data;
 
   if (!fitnessGoal || !level || !equipment) {
@@ -103,3 +101,9 @@ function getWorkoutPlan(goal, level, equipment) {
   const finalPlan = filtered.map(ex => `${ex} (${level}, Equipment: ${equipment ? "Yes" : "No"})`);
   return finalPlan;
 }
+
+module.exports = {
+  saveRecipe,
+  logMeal,
+  generateWorkout
+};
