@@ -1,0 +1,26 @@
+{
+  "name": "cse_350",
+  "version": "1.0.0",
+  "description": "Created to display a cross-platform app that helps users track macros, generate personalized workouts, and create budget-based meal plans. Includes recipe building from ingredients, grocery list generation, and smart dashboard insights for nutrition and fitness tracking.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kkpatel05/cse_350.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kkpatel05/cse_350/issues"
+  },
+  "homepage": "https://github.com/kkpatel05/cse_350#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "firebase": "^11.10.0",
+    "firebase-admin": "^13.4.0"
+  }
+}
