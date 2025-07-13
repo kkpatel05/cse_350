@@ -3,15 +3,40 @@ const admin = require("firebase-admin");
 
 admin.initializeApp();
 
-// Import all service functions
-const { saveRecipe, logMeal, generateWorkout } = require("./services/workoutService");
-const { generateMealPlan } = require("./services/mealPlanService");
-const { updatePreferences, getWeeklySummary } = require("./services/userService");
+// === Workout Services ===
+const {
+  saveRecipe,
+  logMeal,
+  generateWorkout,
+  suggestWorkouts
+} = require("./services/workoutService");
 
-// Export cloud functions
+// === Meal Plan Services ===
+const {
+  generateMealPlan,
+  getNutritionStats,
+  suggestMeals
+} = require("./services/mealPlanService");
+
+// === User Services ===
+const {
+  updatePreferences,
+  getWeeklySummary,
+  trackProgress,
+  getDailySummary
+} = require("./services/userService");
+
+// === Exports ===
 exports.saveRecipe = saveRecipe;
 exports.logMeal = logMeal;
 exports.generateWorkout = generateWorkout;
+exports.suggestWorkouts = suggestWorkouts;
+
 exports.generateMealPlan = generateMealPlan;
+exports.getNutritionStats = getNutritionStats;
+exports.suggestMeals = suggestMeals;
+
 exports.updatePreferences = updatePreferences;
 exports.getWeeklySummary = getWeeklySummary;
+exports.trackProgress = trackProgress;
+exports.getDailySummary = getDailySummary;

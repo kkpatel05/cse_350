@@ -70,6 +70,34 @@ const generateWorkout = functions.https.onCall((data, context) => {
 });
 
 //
+// 🎯 suggestWorkouts(): Recommend exercises for a target muscle group
+//
+const suggestWorkouts = functions.https.onCall(async (data, context) => {
+  const uid = context.auth?.uid;
+  const { targetMuscle } = data;
+
+  if (!uid) {
+    throw new functions.https.HttpsError("unauthenticated", "User must be authenticated.");
+  }
+
+  const workoutsRef = db.collection("workouts");
+  const snapshot = await workoutsRef.get();
+
+  const filtered = [];
+  snapshot.forEach(doc => {
+    const workout = doc.data();
+    if (!targetMuscle || workout.targetMuscle === targetMuscle) {
+      filtered.push({ id: doc.id, ...workout });
+    }
+  });
+
+  return {
+    success: true,
+    suggestions: filtered.slice(0, 5)
+  };
+});
+
+//
 // 🔧 Helper Functions
 //
 function calculateMacros(ingredients) {
@@ -105,5 +133,6 @@ function getWorkoutPlan(goal, level, equipment) {
 module.exports = {
   saveRecipe,
   logMeal,
-  generateWorkout
+  generateWorkout,
+  suggestWorkouts
 };
