@@ -3,7 +3,23 @@ const admin = require("firebase-admin");
 const db = admin.firestore();
 
 function matchesPreferences(recipe, preferences) {
-  // You can add filtering logic here, e.g., check recipe.diet, allergies, etc.
+  if (!recipe || !preferences) return false;
+
+  const userDiet = preferences.diet?.toLowerCase();
+  const userRestrictions = preferences.restrictions || []; 
+
+  // ✅ Check diet match (e.g., vegetarian, vegan, keto, etc.)
+  if (userDiet && recipe.diet?.toLowerCase() !== userDiet0) {
+    return false;
+  }
+  // ✅ Check that all user restrictions are included in recipe.tags
+  const recipeTags = recipe.tags?.map(tag => tag.toLowerCase()) || [];
+
+  for (const restriction of userRestrictions) {
+    if (!recipeTags.includes(restriction.toLowerCase())) {
+      return false;
+    }
+  }
   return true;
 }
 
