@@ -26,6 +26,8 @@ const {
   getDailySummary
 } = require("./services/userService");
 
+const { patchRecipesWithDietTags } = require("./services/adminPatchService");
+
 // === Exports ===
 exports.saveRecipe = saveRecipe;
 exports.logMeal = logMeal;
@@ -40,3 +42,4 @@ exports.updatePreferences = updatePreferences;
 exports.getWeeklySummary = getWeeklySummary;
 exports.trackProgress = trackProgress;
 exports.getDailySummary = getDailySummary;
+exports.patchRecipesWithDietTags = patchRecipesWithDietTags;

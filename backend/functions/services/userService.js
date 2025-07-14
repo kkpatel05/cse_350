@@ -2,6 +2,38 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const db = admin.firestore();
 
+// ✅ updatePreferences: Store user preferences
+const updatePreferences = functions.https.onCall(async (data, context) => {
+  const { userId, preferences } = data;
+
+  if (!userId || !preferences) {
+    throw new functions.https.HttpsError("invalid-argument", "Missing preferences.");
+  }
+
+  await db.collection("users").doc(userId).set({ preferences }, { merge: true });
+  return { success: true, message: "Preferences updated" };
+});
+
+// ✅ getWeeklySummary: Return 7 days of logs
+const getWeeklySummary = functions.https.onCall(async (data, context) => {
+  const { userId } = data;
+
+  if (!userId) {
+    throw new functions.https.HttpsError("invalid-argument", "Missing user ID.");
+  }
+
+  const logsRef = db.collection("users").doc(userId).collection("dailyLogs");
+  const snapshot = await logsRef.orderBy("date", "desc").limit(7).get();
+
+  const summary = snapshot.docs.map(doc => ({
+    date: doc.id,
+    ...doc.data()
+  }));
+
+  return { success: true, summary };
+});
+
+// ✅ trackProgress
 const trackProgress = functions.https.onCall(async (data, context) => {
   const uid = context.auth?.uid;
   if (!uid) {
@@ -18,6 +50,7 @@ const trackProgress = functions.https.onCall(async (data, context) => {
   return { success: true, message: "Progress tracked successfully" };
 });
 
+// ✅ getDailySummary
 const getDailySummary = functions.https.onCall(async (data, context) => {
   const uid = context.auth?.uid;
   const { dateString } = data;
@@ -52,7 +85,7 @@ const getDailySummary = functions.https.onCall(async (data, context) => {
   };
 });
 
-
+// ✅ Export all
 module.exports = {
   updatePreferences,
   getWeeklySummary,

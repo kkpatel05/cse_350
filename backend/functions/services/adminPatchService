@@ -1,0 +1,55 @@
+const functions = require("firebase-functions");
+const admin = require("firebase-admin");
+const db = admin.firestore();
+
+function determineDietAndTags(ingredients = []) {
+  const allIngredients = ingredients.join(" ").toLowerCase();
+  const tags = [];
+
+  let diet = null;
+  const nonVegetarian = ["chicken", "beef", "pork", "fish", "shrimp", "bacon"];
+  const nonVegan = ["egg", "cheese", "milk", "butter", "honey", "yogurt"];
+  const gluten = ["wheat", "flour", "bread", "pasta"];
+  const dairy = ["milk", "cheese", "butter", "cream", "yogurt"];
+
+  if (!nonVegetarian.some(item => allIngredients.includes(item))) {
+    diet = "vegetarian";
+    if (!nonVegan.some(item => allIngredients.includes(item))) {
+      diet = "vegan";
+    }
+  }
+
+  if (!gluten.some(item => allIngredients.includes(item))) {
+    tags.push("gluten-free");
+  }
+  if (!dairy.some(item => allIngredients.includes(item))) {
+    tags.push("dairy-free");
+  }
+
+  return { diet, tags };
+}
+
+const patchRecipesWithDietTags = functions.https.onRequest(async (req, res) => {
+  try {
+    const snapshot = await db.collection("recipes").get();
+    const batch = db.batch();
+
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      const ingredients = data.ingredients || [];
+
+      const { diet, tags } = determineDietAndTags(ingredients);
+
+      const ref = db.collection("recipes").doc(doc.id);
+      batch.update(ref, { diet, tags });
+    });
+
+    await batch.commit();
+    res.send("Patched all recipes with diet and tags successfully.");
+  } catch (error) {
+    console.error("Error patching recipes:", error);
+    res.status(500).send("Failed to patch recipes.");
+  }
+});
+
+module.exports = { patchRecipesWithDietTags };
