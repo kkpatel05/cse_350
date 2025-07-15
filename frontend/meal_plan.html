@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Meal Prep</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #2d9b32;
+      color: #000;
+    }
+
+    .container {
+      padding: 1rem;
+    }
+
+    h1, h2 {
+      text-align: center;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      margin: 1rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .box {
+      background-color: white;
+      border-radius: 15px;
+      padding: 1rem;
+      flex: 1;
+      min-width: 220px;
+    }
+
+    .box h3 {
+      margin-top: 0;
+    }
+
+    input[type="number"], select {
+      width: 100%;
+      padding: 0.5rem;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .grocery-list, .ingredients {
+      list-style: none;
+      padding: 0;
+    }
+
+    .grocery-list li, .ingredients li {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 0.3rem;
+    }
+
+    .meal-plan {
+      background-color: white;
+      border-radius: 15px;
+      padding: 1rem;
+      margin: 1rem;
+    }
+
+    .meal-columns {
+      display: flex;
+      justify-content: space-around;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .meal-card {
+      background-color: #f9f9f9;
+      padding: 1rem;
+      border-radius: 10px;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: #2d9b32;
+      display: flex;
+      justify-content: space-around;
+      padding: 0.5rem 0;
+    }
+
+    .bottom-nav img {
+      width: 30px;
+      height: 30px;
+    }
+
+    .bottom-nav a {
+      text-align: center;
+      color: white;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Meal Prep</h1>
+
+    <div class="row">
+      <div class="box">
+        <h3>Enter Your Budget</h3>
+        <input type="number" placeholder="Ex: 20.00" id="budgetInput">
+        <h4>Grocery List:</h4>
+        <ul class="grocery-list" id="groceryList">
+          <li><span>Eggs</span><span>$3.65</span></li>
+          <li><span>Chicken</span><span>$8.00</span></li>
+          <li><span>Rice</span><span>$4.99</span></li>
+          <li><span>Milk</span><span>$2.79</span></li>
+        </ul>
+      </div>
+
+      <div class="box">
+        <h3>Dietary Restriction</h3>
+        <select id="restrictionSelect">
+          <option>Select Restrictions</option>
+          <option>Vegan</option>
+          <option>Vegetarian</option>
+          <option>Gluten-Free</option>
+        </select>
+        <h3>Select Ingredients</h3>
+        <ul class="ingredients">
+          <li>Rice Cakes</li>
+          <li>Yogurt</li>
+          <li>Banana</li>
+          <li>Protein Powder</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="meal-plan">
+      <h2>Meal Plan</h2>
+      <div class="meal-columns">
+        <div class="meal-card">
+          <h3>Breakfast</h3>
+          <p><strong>Protein Oats</strong></p>
+          <ul>
+            <li>½ cup rolled oats</li>
+            <li>1 scoop protein</li>
+            <li>1 tbsp almond butter</li>
+            <li>½ banana</li>
+            <li>1 tsp chia seeds</li>
+            <li>1 cup water/milk</li>
+          </ul>
+          <a href="#">View more...</a>
+        </div>
+        <div class="meal-card">
+          <h3>Lunch</h3>
+          <p><strong>Grilled Chicken Bowl</strong></p>
+          <ul>
+            <li>4–5 oz chicken breast</li>
+            <li>½ cup cooked rice/quinoa</li>
+            <li>½ cup black beans</li>
+            <li>½ avocado (sliced)</li>
+            <li>1 cup mixed greens</li>
+            <li>1 tbsp olive oil + lemon</li>
+          </ul>
+          <a href="#">View more...</a>
+        </div>
+        <div class="meal-card">
+          <h3>Dinner</h3>
+          <p><strong>Turkey Stir Fry</strong></p>
+          <ul>
+            <li>5 oz lean ground turkey</li>
+            <li>¾ cup brown rice</li>
+            <li>1 cup stir-fry vegetables</li>
+            <li>1 tbsp soy/coconut aminos</li>
+            <li>1 tsp sesame/olive oil</li>
+            <li>1 clove garlic (minced)</li>
+          </ul>
+          <a href="#">View more...</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="dashboard.html"><img src="assets/Home.png" alt="Home"><br>Home</a>
+    <a href="#"><img src="assets/Activity.png" alt="Activity"><br>Activity</a>
+    <a href="#"><img src="assets/Settings.png" alt="Settings"><br>Settings</a>
+    <a href="#"><img src="assets/Profile.png" alt="Profile"><br>Profile</a>
+  </nav>
+
+</body>
+</html>

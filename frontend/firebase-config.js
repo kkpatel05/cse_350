@@ -1,6 +1,6 @@
 // firebase-config.js
 import { initializeApp } from "firebase/app";
-import { getFunctions } from "firebase/functions";
+import { getFunctions, httpsCallable } from "firebase/functions";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAoNcr7QGFQ_iOXpY0MzFBsdOSP06cBc-0",
@@ -11,5 +11,15 @@ const firebaseConfig = {
   appId: "1:391648176781:web:46a99023824f01bdae10c4"
 };
 
+// Initialize Firebase App
 const app = initializeApp(firebaseConfig);
-export const functions = getFunctions(app);
+
+// Initialize Functions
+const functions = getFunctions(app);
+
+// Export callable cloud functions
+export const getRecipes = httpsCallable(functions, "getRecipes");
+export const generateMealPlan = httpsCallable(functions, "generateMealPlan");
+
+export { app, functions };
+
