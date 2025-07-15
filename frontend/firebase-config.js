@@ -22,4 +22,3 @@ export const getRecipes = httpsCallable(functions, "getRecipes");
 export const generateMealPlan = httpsCallable(functions, "generateMealPlan");
 
 export { app, functions };
-
