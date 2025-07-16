@@ -144,46 +144,8 @@
 
     <div class="meal-plan">
       <h2>Meal Plan</h2>
-      <div class="meal-columns">
-        <div class="meal-card">
-          <h3>Breakfast</h3>
-          <p><strong>Protein Oats</strong></p>
-          <ul>
-            <li>½ cup rolled oats</li>
-            <li>1 scoop protein</li>
-            <li>1 tbsp almond butter</li>
-            <li>½ banana</li>
-            <li>1 tsp chia seeds</li>
-            <li>1 cup water/milk</li>
-          </ul>
-          <a href="#">View more...</a>
-        </div>
-        <div class="meal-card">
-          <h3>Lunch</h3>
-          <p><strong>Grilled Chicken Bowl</strong></p>
-          <ul>
-            <li>4–5 oz chicken breast</li>
-            <li>½ cup cooked rice/quinoa</li>
-            <li>½ cup black beans</li>
-            <li>½ avocado (sliced)</li>
-            <li>1 cup mixed greens</li>
-            <li>1 tbsp olive oil + lemon</li>
-          </ul>
-          <a href="#">View more...</a>
-        </div>
-        <div class="meal-card">
-          <h3>Dinner</h3>
-          <p><strong>Turkey Stir Fry</strong></p>
-          <ul>
-            <li>5 oz lean ground turkey</li>
-            <li>¾ cup brown rice</li>
-            <li>1 cup stir-fry vegetables</li>
-            <li>1 tbsp soy/coconut aminos</li>
-            <li>1 tsp sesame/olive oil</li>
-            <li>1 clove garlic (minced)</li>
-          </ul>
-          <a href="#">View more...</a>
-        </div>
+      <div class="meal-columns" id="mealColumns">
+        <!-- Dynamically generated recipe cards will appear here -->
       </div>
     </div>
   </div>
@@ -194,6 +156,8 @@
     <a href="#"><img src="assets/Settings.png" alt="Settings"><br>Settings</a>
     <a href="#"><img src="assets/Profile.png" alt="Profile"><br>Profile</a>
   </nav>
+
+  <script type="module" src="./meal_plan.js"></script>
 
 </body>
 </html>
