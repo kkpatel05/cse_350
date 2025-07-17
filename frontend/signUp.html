@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>Grub N' Grind - Sign Up</title>
-  <style>                    /*Need to make it ready for Firebase Authentication integration when you're ready, has not been added yet*/
-    body {                    /*Need to later connect the Sign Up button to Firebase Auth using createUserWithEmailAndPassword()*/
+  <style>
+    /* (same CSS you already wrote) */
+    body {
       margin: 0;
       font-family: Arial, sans-serif;
       background-color: #1db144;
@@ -78,14 +79,65 @@
     <div class="grub-banner">GRUB N' GRIND</div>
     <div class="signup-box">
       <h2>Create Account</h2>
-      <input type="text" placeholder="Username" />
-      <input type="email" placeholder="Email" />
-      <input type="password" placeholder="Password" />
-      <input type="password" placeholder="Confirm Password" />
-      <button class="signup-button">Sign Up</button>
+      <input type="text" id="username" placeholder="Username" />
+      <input type="email" id="email" placeholder="Email" />
+      <input type="password" id="password" placeholder="Password" />
+      <input type="password" id="confirm-password" placeholder="Confirm Password" />
+      <button class="signup-button" onclick="signUp()">Sign Up</button>
       <a class="login-link" href="login.html">Already have an account? Log In</a>
     </div>
   </div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAoNcr7QGFQ_iOxPY0MzFBsdOSP06cBc-0",
+      authDomain: "grub-n--grind.firebaseapp.com",
+      projectId: "grub-n--grind",
+      storageBucket: "grub-n--grind.appspot.com",
+      messagingSenderId: "391648176781",
+      appId: "1:391648176781:web:7b37e76466bdd796ae10c4"
+    };
+
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    window.signUp = async function () {
+      const username = document.getElementById("username").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirm-password").value;
+
+      if (password !== confirmPassword) {
+        alert("❌ Passwords do not match.");
+        return;
+      }
+
+      try {
+        const userCred = await createUserWithEmailAndPassword(auth, email, password);
+        const uid = userCred.user.uid;
+
+        // Store additional user info in Firestore
+        await setDoc(doc(db, "users", uid), {
+          email: email,
+          username: username,
+          createdAt: new Date()
+        });
+
+        alert("✅ Account created successfully!");
+        window.location.href = "login.html";
+
+      } catch (err) {
+        alert("❌ Sign-up failed: " + err.message);
+      }
+    };
+  </script>
 
 </body>
 </html>
