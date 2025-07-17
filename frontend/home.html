@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Home - Grub N' Grind</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #1db144;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .header {
+      background-color: white;
+      padding: 10px 20px;
+      border-radius: 15px;
+      margin: 10px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .summary-box {
+      background-color: white;
+      width: 90%;
+      border-radius: 15px;
+      padding: 15px;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .summary-box h2 {
+      margin-top: 0;
+      font-size: 18px;
+      color: #0f8150;
+    }
+
+    .summary-item {
+      font-size: 16px;
+      margin: 5px 0;
+    }
+
+    .quick-grid {
+      background-color: white;
+      width: 90%;
+      border-radius: 15px;
+      padding: 20px;
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .quick-card {
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      text-align: center;
+      padding: 10px;
+      text-decoration: none;
+      color: black;
+      transition: transform 0.2s ease;
+    }
+
+    .quick-card:hover {
+      transform: scale(1.05);
+    }
+
+    .quick-card img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+    }
+
+    .quick-card p {
+      margin: 5px 0 0;
+      font-weight: bold;
+    }
+
+    .nav-bar {
+      background-color: white;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 10px 0;
+      position: fixed;
+      bottom: 0;
+      border-top: 1px solid #ccc;
+    }
+
+    .nav-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .nav-icon img {
+      width: 25px;
+      height: 25px;
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>Welcome Back!</h1>
+  </div>
+
+  <div class="summary-box">
+    <h2>Today's Summary</h2>
+    <div class="summary-item">Calories Consumed: 1,350</div>
+    <div class="summary-item">Workouts Completed: 2</div>
+  </div>
+
+  <div class="quick-grid">
+    <a href="meal_plan.html" class="quick-card">
+      <img src="assets/Food.png" alt="Meals" />
+      <p>Meals</p>
+    </a>
+    <a href="dashboard.html" class="quick-card">
+      <img src="assets/Fitness.png" alt="Workouts" />
+      <p>Workouts</p>
+    </a>
+  </div>
+
+  <div class="nav-bar">
+    <div class="nav-icon">
+      <img src="assets/Home.png" alt="Home" />
+      <span>Home</span>
+    </div>
+    <div class="nav-icon">
+      <img src="assets/Activity.png" alt="Activity" />
+      <span>Activity</span>
+    </div>
+    <div class="nav-icon">
+      <img src="assets/Settings.png" alt="Settings" />
+      <span>Settings</span>
+    </div>
+    <div class="nav-icon">
+      <img src="assets/Profile.png" alt="Profile" />
+      <span>Profile</span>
+    </div>
+  </div>
+
+</body>
+</html>
