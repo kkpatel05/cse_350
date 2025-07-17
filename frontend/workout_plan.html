@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gym Workouts</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: #28a745;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 400px;
+      margin: 20px auto;
+      background-color: white;
+      border-radius: 20px;
+      padding: 15px;
+    }
+
+    h1 {
+      text-align: center;
+      background-color: white;
+      padding: 10px;
+      border-radius: 25px;
+    }
+
+    select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #aaa;
+      margin-bottom: 15px;
+    }
+
+    select option[value=""] {
+      color: grey; /* Make only 'Muscle Group' grey */
+    }
+
+    .workout-btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #aaa;
+      border-radius: 20px;
+      background-color: rgba(255, 255, 255, 0.7);
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .workout-btn:hover {
+      background-color: rgba(255, 255, 255, 0.9);
+    }
+
+    .workout-details {
+      display: none;
+      padding: 10px;
+      border-left: 3px solid #28a745;
+      background-color: #f9f9f9;
+      margin-bottom: 10px;
+    }
+
+    .workout-details img {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Gym</h1>
+
+    <select id="muscleGroup" onchange="loadWorkouts()">
+      <option value="" selected>Muscle Group</option>
+      <option value="chest">Chest</option>
+      <option value="back">Back</option>
+      <option value="legs">Legs</option>
+      <option value="arms">Arms</option>
+      <option value="shoulders">Shoulders</option>
+    </select>
+
+    <div id="workoutList"></div>
+  </div>
+
+  <!-- Firebase App -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+  apiKey: "AIzaSyAoNcr7QGFQ_iOXpY0MzFBsdOSP06cBc-0",
+  authDomain: "grub-n--grind.firebaseapp.com",
+  projectId: "grub-n--grind",
+  storageBucket: "grub-n--grind.appspot.com",
+  messagingSenderId: "391648176781",
+  appId: "1:391648176781:web:7b37e7646b6dd796ae10c4"
+};
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.loadWorkouts = async function () {
+      const muscleGroup = document.getElementById("muscleGroup").value;
+      const workoutList = document.getElementById("workoutList");
+      workoutList.innerHTML = "";
+
+      if (!muscleGroup) return;
+
+      const q = query(collection(db, "workout_plan"), where("muscleGroup", "==", muscleGroup));
+      const querySnapshot = await getDocs(q);
+
+      querySnapshot.forEach(doc => {
+        const workout = doc.data();
+        const btn = document.createElement("button");
+        btn.className = "workout-btn";
+        btn.textContent = workout.name;
+
+        const detailDiv = document.createElement("div");
+        detailDiv.className = "workout-details";
+        detailDiv.innerHTML = `
+          <img src="${workout.imageURL}" alt="${workout.name}" />
+          <p>${workout.instructions}</p>
+        `;
+
+        btn.onclick = () => {
+          detailDiv.style.display = detailDiv.style.display === "block" ? "none" : "block";
+        };
+
+        workoutList.appendChild(btn);
+        workoutList.appendChild(detailDiv);
+      });
+    }
+  </script>
+</body>
+</html>
