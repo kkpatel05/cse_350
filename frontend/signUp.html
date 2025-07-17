@@ -18,7 +18,7 @@
       background-color: white;
       padding: 30px 25px;
       border-radius: 15px;
-      width: 300px;
+      width: 320px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
 
@@ -49,6 +49,16 @@
       border-radius: 8px;
       border: 1px solid #ccc;
       font-size: 14px;
+    }
+
+    .checkbox-group {
+      margin-top: 10px;
+    }
+
+    .checkbox-group label {
+      font-size: 14px;
+      display: block;
+      margin-bottom: 4px;
     }
 
     .signup-button {
@@ -82,6 +92,15 @@
       <input type="email" id="email" placeholder="Email" />
       <input type="password" id="password" placeholder="Password" />
       <input type="password" id="confirm-password" placeholder="Confirm Password" />
+
+      <!-- ✅ Dietary Preferences (Checkboxes) -->
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="dietaryPref" value="vegan" /> Vegan</label>
+        <label><input type="checkbox" name="dietaryPref" value="vegetarian" /> Vegetarian</label>
+        <label><input type="checkbox" name="dietaryPref" value="glutenFree" /> Gluten Free</label>
+        <label><input type="checkbox" name="dietaryPref" value="dairyFree" /> Dairy Free</label>
+      </div>
+
       <button class="signup-button" onclick="signUp()">Sign Up</button>
       <a class="login-link" href="login.html">Already have an account? Log In</a>
     </div>
@@ -93,13 +112,13 @@
     import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const firebaseConfig = {
-    apiKey: "AIzaSyAoNcr7QGFQ_iOXpY0MzFBsdOSP06cBc-0",
-    authDomain: "grub-n--grind.firebaseapp.com",
-    projectId: "grub-n--grind",
-    storageBucket: "grub-n--grind.firebasestorage.app",
-    messagingSenderId: "391648176781",
-    appId: "1:391648176781:web:7b37e7646b6dd796ae10c4"
-  };
+      apiKey: "AIzaSyAoNcr7QGFQ_iOXpY0MzFBsdOSP06cBc-0",
+      authDomain: "grub-n--grind.firebaseapp.com",
+      projectId: "grub-n--grind",
+      storageBucket: "grub-n--grind.firebasestorage.app",
+      messagingSenderId: "391648176781",
+      appId: "1:391648176781:web:7b37e7646b6dd796ae10c4"
+    };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
@@ -111,6 +130,10 @@
       const password = document.getElementById("password").value;
       const confirmPassword = document.getElementById("confirm-password").value;
 
+      // ✅ Gather selected dietary preferences
+      const dietaryPrefs = Array.from(document.querySelectorAll('input[name="dietaryPref"]:checked'))
+                                .map(cb => cb.value);
+
       if (password !== confirmPassword) {
         alert("❌ Passwords do not match.");
         return;
@@ -121,8 +144,9 @@
         const uid = userCred.user.uid;
 
         await setDoc(doc(db, "users", uid), {
-          email: email,
-          username: username,
+          email,
+          username,
+          dietaryPrefs,
           createdAt: new Date()
         });
 
