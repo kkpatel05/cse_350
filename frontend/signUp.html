@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Grub N' Grind - Sign Up</title>
   <style>
-    /* (same CSS you already wrote) */
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -70,11 +69,11 @@
       text-align: center;
       display: block;
       margin-top: 10px;
+      color: #0f8150;
     }
   </style>
 </head>
 <body>
-
   <div class="signup-container">
     <div class="grub-banner">GRUB N' GRIND</div>
     <div class="signup-box">
@@ -88,21 +87,19 @@
     </div>
   </div>
 
-  <!-- Firebase SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyAoNcr7QGFQ_iOxPY0MzFBsdOSP06cBc-0",
-      authDomain: "grub-n--grind.firebaseapp.com",
-      projectId: "grub-n--grind",
-      storageBucket: "grub-n--grind.appspot.com",
-      messagingSenderId: "391648176781",
-      appId: "1:391648176781:web:7b37e76466bdd796ae10c4"
-    };
-
+    apiKey: "AIzaSyAoNcr7QGFQ_iOXpY0MzFBsdOSP06cBc-0",
+    authDomain: "grub-n--grind.firebaseapp.com",
+    projectId: "grub-n--grind",
+    storageBucket: "grub-n--grind.firebasestorage.app",
+    messagingSenderId: "391648176781",
+    appId: "1:391648176781:web:7b37e7646b6dd796ae10c4"
+  };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
@@ -123,21 +120,19 @@
         const userCred = await createUserWithEmailAndPassword(auth, email, password);
         const uid = userCred.user.uid;
 
-        // Store additional user info in Firestore
         await setDoc(doc(db, "users", uid), {
           email: email,
           username: username,
           createdAt: new Date()
         });
 
-        alert("✅ Account created successfully!");
+        alert("✅ Account created!");
         window.location.href = "login.html";
-
       } catch (err) {
         alert("❌ Sign-up failed: " + err.message);
+        console.error(err);
       }
     };
   </script>
-
 </body>
 </html>
