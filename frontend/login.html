@@ -123,7 +123,7 @@
       try {
         const userCred = await signInWithEmailAndPassword(auth, email, password);
         alert("✅ Logged in as " + userCred.user.email);
-        window.location.href = "dashboard.html"; // 🔁 Redirect after login
+        window.location.href = "home.html"; // 🔁 Redirect after login
       } catch (err) {
         alert("❌ Login failed: " + err.message);
       }
