@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Home - Grub N' Grind</title>
+  <title>Workout Dashboard - Grub N' Grind</title>
   <style>
     body {
       margin: 0;
@@ -28,27 +28,16 @@
       font-size: 24px;
     }
 
-    .summary-box {
-      background-color: white;
+    .days {
+      display: flex;
+      justify-content: space-around;
       width: 90%;
-      border-radius: 15px;
-      padding: 15px;
       margin-top: 10px;
-      text-align: center;
+      color: white;
+      font-weight: bold;
     }
 
-    .summary-box h2 {
-      margin-top: 0;
-      font-size: 18px;
-      color: #0f8150;
-    }
-
-    .summary-item {
-      font-size: 16px;
-      margin: 5px 0;
-    }
-
-    .quick-grid {
+    .workout-grid {
       background-color: white;
       width: 90%;
       border-radius: 15px;
@@ -59,27 +48,26 @@
       gap: 15px;
     }
 
-    .quick-card {
+    .workout-card {
       border: 1px solid #ccc;
       border-radius: 10px;
       text-align: center;
       padding: 10px;
-      text-decoration: none;
-      color: black;
+      cursor: pointer;
       transition: transform 0.2s ease;
     }
 
-    .quick-card:hover {
+    .workout-card:hover {
       transform: scale(1.05);
     }
 
-    .quick-card img {
-      width: 50px;
-      height: 50px;
+    .workout-card img {
+      width: 60px;
+      height: 60px;
       object-fit: contain;
     }
 
-    .quick-card p {
+    .workout-card p {
       margin: 5px 0 0;
       font-weight: bold;
     }
@@ -113,31 +101,45 @@
 <body>
 
   <div class="header">
-    <h1>Welcome Back!</h1>
+    <h1>Workout</h1>
   </div>
 
-  <div class="summary-box">
-    <h2>Today's Summary</h2>
-    <div class="summary-item">Calories Consumed: 1,350</div>
-    <div class="summary-item">Workouts Completed: 2</div>
+  <div class="days">
+    <span>Sun</span><span>Mon</span><span>Tues</span><span>Wed</span><span>Thurs</span><span>Fri</span><span>Sat</span>
   </div>
 
-  <div class="quick-grid">
-    <a href="meal_plan.html" class="quick-card">
-      <img src="assets/Food.png" alt="Meals" />
-      <p>Meals</p>
-    </a>
-    <a href="gym.html" class="quick-card">
-      <img src="assets/Fitness.png" alt="Workouts" />
-      <p>Workouts</p>
-    </a>
+  <div class="workout-grid">
+    <div class="workout-card">
+      <img src="assets/Gym.png" alt="Gym" />
+      <p>Gym</p>
+    </div>
+    <div class="workout-card">
+      <img src="assets/Calestenics.png" alt="Calisthenics" />
+      <p>Calisthenics</p>
+    </div>
+    <div class="workout-card">
+      <img src="assets/Swimming.png" alt="Swimming" />
+      <p>Swimming</p>
+    </div>
+    <div class="workout-card">
+      <img src="assets/Cycling.png" alt="Cycling" />
+      <p>Cycling</p>
+    </div>
+    <div class="workout-card">
+      <img src="assets/Meditation.png" alt="Meditation" />
+      <p>Meditation</p>
+    </div>
+    <div class="workout-card">
+      <img src="assets/Yoga.png" alt="Yoga" />
+      <p>Yoga</p>
+    </div>
   </div>
 
   <div class="nav-bar">
-    <div class="nav-icon">
+    <a href="home.html" class="nav-icon">
       <img src="assets/Home.png" alt="Home" />
       <span>Home</span>
-    </div>
+    </a>
     <div class="nav-icon">
       <img src="assets/Activity.png" alt="Activity" />
       <span>Activity</span>
