@@ -78,47 +78,68 @@
   <div class="container">
     <h1>Gym</h1>
 
-    <select id="muscleGroup" onchange="loadWorkouts(); updateSelectColor();">
+    <select id="muscleGroup">
       <option value="">Muscle Group</option>
+      <option value="upper arms">Upper Arms</option>
+      <option value="upper legs">Upper Legs</option>
+      <option value="waist">Waist</option>
+      <option value="lower arms">Lower Arms</option>
+      <option value="shoulders">Shoulders</option>
       <option value="chest">Chest</option>
       <option value="back">Back</option>
-      <option value="legs">Legs</option>
-      <option value="arms">Arms</option>
-      <option value="shoulders">Shoulders</option>
+      <option value="lower legs">Lower Legs</option>
     </select>
 
     <div id="workoutList"></div>
   </div>
 
-  <!-- Firebase App -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
     const firebaseConfig = {
-  apiKey: "AIzaSyAoNcr7QGFQ_iOXpY0MzFBsdOSP06cBc-0",
-  authDomain: "grub-n--grind.firebaseapp.com",
-  projectId: "grub-n--grind",
-  storageBucket: "grub-n--grind.appspot.com",
-  messagingSenderId: "391648176781",
-  appId: "1:391648176781:web:7b37e7646b6dd796ae10c4"
-};
+      apiKey: "AIzaSyAoNcr7QGFQ_iOXpY0MzFBsdOSP06cBc-0",
+      authDomain: "grub-n--grind.firebaseapp.com",
+      projectId: "grub-n--grind",
+      storageBucket: "grub-n--grind.appspot.com",
+      messagingSenderId: "391648176781",
+      appId: "1:391648176781:web:7b37e7646b6dd796ae10c4"
+    };
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+    const auth = getAuth(app);
 
-    window.loadWorkouts = async function () {
+    async function loginTestUser() {
+      try {
+        // 🔒 Update with a real user from Firebase Auth
+        await signInWithEmailAndPassword(auth, "your_user_email@example.com", "your_password");
+        console.log("✅ Logged in successfully");
+      } catch (err) {
+        console.error("❌ Login failed:", err.message);
+        alert("Login failed: " + err.message);
+      }
+    }
+
+    async function loadWorkouts() {
       const muscleGroup = document.getElementById("muscleGroup").value;
       const workoutList = document.getElementById("workoutList");
       workoutList.innerHTML = "";
 
       if (!muscleGroup) return;
 
-      const q = query(collection(db, "gym_UI"), where("muscleGroup", "==", muscleGroup));
+      const q = query(collection(db, "exerciseLibrary"), where("bodyPart", "==", muscleGroup));
       const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) {
+        workoutList.innerHTML = "<p>No workouts found for this group.</p>";
+        return;
+      }
 
       querySnapshot.forEach(doc => {
         const workout = doc.data();
+
         const btn = document.createElement("button");
         btn.className = "workout-btn";
         btn.textContent = workout.name;
@@ -126,8 +147,8 @@
         const detailDiv = document.createElement("div");
         detailDiv.className = "workout-details";
         detailDiv.innerHTML = `
-          <img src="${workout.imageURL}" alt="${workout.name}" />
-          <p>${workout.instructions}</p>
+          <img src="${workout.gifUrl}" alt="${workout.name}" />
+          <p>${workout.instructions?.join("<br>") || ""}</p>
         `;
 
         btn.onclick = () => {
@@ -139,15 +160,21 @@
       });
     }
 
-    // Force grey color when "Muscle Group" is selected, black otherwise
-    window.updateSelectColor = function () {
+    function updateSelectColor() {
       const select = document.getElementById("muscleGroup");
       select.style.color = select.value === "" ? "grey" : "black";
-    };
+    }
 
-    // Set initial color on page load
-    window.addEventListener("DOMContentLoaded", () => {
-      updateSelectColor();
+    window.addEventListener("DOMContentLoaded", async () => {
+      await loginTestUser();
+
+      const select = document.getElementById("muscleGroup");
+      select.addEventListener("change", () => {
+        loadWorkouts();
+        updateSelectColor();
+      });
+
+      updateSelectColor(); // Set initial color
     });
   </script>
 </body>
