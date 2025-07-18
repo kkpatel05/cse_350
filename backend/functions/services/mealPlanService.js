@@ -9,7 +9,7 @@ function matchesPreferences(recipe, preferences) {
   const userRestrictions = preferences.restrictions || []; 
 
   // ✅ Check diet match (e.g., vegetarian, vegan, keto, etc.)
-  if (userDiet && recipe.diet?.toLowerCase() !== userDiet0) {
+  if (userDiet && recipe.diet?.toLowerCase() !== userDiet) {
     return false;
   }
   // ✅ Check that all user restrictions are included in recipe.tags
@@ -39,8 +39,23 @@ const generateMealPlan = functions.https.onCall(async (data, context) => {
     .map(doc => doc.data())
     .filter(recipe => matchesPreferences(recipe, preferences));
 
-  return { success: true, mealPlan: filtered.slice(0, 5) };
+  // Separate recipes by type
+  const breakfastOptions = filtered.filter(r => r.type === "breakfast");
+  const lunchOptions = filtered.filter(r => r.type === "lunch");
+  const dinnerOptions = filtered.filter(r => r.type === "dinner");
+
+  const pickRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+  const weekPlan = Array.from({ length: 7 }, (_, i) => ({
+    day: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][i],
+    breakfast: pickRandom(breakfastOptions),
+    lunch: pickRandom(lunchOptions),
+    dinner: pickRandom(dinnerOptions)
+  }));
+
+  return { success: true, mealPlan: weekPlan };
 });
+
 
 // 🔢 Get Nutrition Stats
 const getNutritionStats = functions.https.onCall(async (data, context) => {
