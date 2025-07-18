@@ -22,24 +22,21 @@ const mealPlanContainer = document.getElementById("mealColumns");
 function renderMealPlan(plan) {
   mealPlanContainer.innerHTML = "";
 
-  // Auto-generate 7-day plan with rotating recipes
-  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  for (let i = 0; i < 7; i++) {
-    const breakfast = plan[i % plan.length];
-    const lunch = plan[(i + 1) % plan.length];
-    const dinner = plan[(i + 2) % plan.length];
-
+  plan.forEach(entry => {
     const dayCard = document.createElement("div");
     dayCard.className = "meal-card";
     dayCard.innerHTML = `
-      <h3>${days[i]}</h3>
-      <p><strong>Breakfast:</strong> ${breakfast?.title || "N/A"}</p>
-      <p><strong>Lunch:</strong> ${lunch?.title || "N/A"}</p>
-      <p><strong>Dinner:</strong> ${dinner?.title || "N/A"}</p>
+      <h3>${entry.day}</h3>
+      <p><strong>Meal:</strong> ${entry.meal?.title || "N/A"}</p>
+      <p>${entry.meal?.description || ""}</p>
+      <ul>
+        ${(entry.meal?.ingredients || []).map(i => `<li>${i}</li>`).join("")}
+      </ul>
     `;
     mealPlanContainer.appendChild(dayCard);
-  }
+  });
 }
+
 
 async function fetchUserPreferences(uid) {
   const userDoc = await getDoc(doc(db, "users", uid));

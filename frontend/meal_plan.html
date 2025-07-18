@@ -145,7 +145,7 @@
     <div class="meal-plan">
       <h2>Meal Plan</h2>
       <div class="meal-columns" id="mealColumns">
-        <!-- Dynamically generated recipe cards will appear here -->
+        <!-- Meals will be rendered here -->
       </div>
     </div>
   </div>
@@ -157,7 +157,63 @@
     <a href="#"><img src="assets/Profile.png" alt="Profile"><br>Profile</a>
   </nav>
 
-  <script type="module" src="./meal_plan.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+    const firebaseConfig = {
+      apiKey: "AIzaSyAoNcr7QGFQ_iOXpY0MzFBsdOSP06cBc-0",
+      authDomain: "grub-n--grind.firebaseapp.com",
+      projectId: "grub-n--grind",
+      storageBucket: "grub-n--grind.appspot.com",
+      messagingSenderId: "391648176781",
+      appId: "1:391648176781:web:7b37e7646b6dd796ae10c4"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const mealColumns = document.getElementById("mealColumns");
+
+    function renderMeals(recipes) {
+      const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      mealColumns.innerHTML = "";
+      for (let i = 0; i < 7; i++) {
+        const recipe = recipes[i % recipes.length];
+        const card = document.createElement("div");
+        card.className = "meal-card";
+        card.innerHTML = `
+          <h3>${days[i]}</h3>
+          <p><strong>Meal:</strong> ${recipe.title || "Untitled"}</p>
+          <p>${recipe.description || ""}</p>
+          <ul>${(recipe.ingredients || []).map(item => `<li>${item}</li>`).join("")}</ul>
+        `;
+        mealColumns.appendChild(card);
+      }
+    }
+
+    async function loadMeals(user) {
+      try {
+        const recipesSnap = await getDocs(collection(db, "recipes"));
+        const recipes = recipesSnap.docs.map(doc => doc.data());
+        if (recipes.length === 0) throw new Error("No recipes found.");
+        renderMeals(recipes);
+      } catch (err) {
+        console.error("Failed to load meals:", err);
+        alert("❌ Unable to load meal plan.");
+      }
+    }
+
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        loadMeals(user);
+      } else {
+        alert("Please log in to view your meal plan.");
+        window.location.href = "login.html";
+      }
+    });
+  </script>
 </body>
 </html>

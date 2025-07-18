@@ -24,38 +24,17 @@ function matchesPreferences(recipe, preferences) {
 }
 
 // 🍽️ Generate Meal Plan
+
 const generateMealPlan = functions.https.onCall(async (data, context) => {
-  const { userId, dailyCalories, preferences } = data;
-
-  if (!userId || !dailyCalories || !preferences) {
-    throw new functions.https.HttpsError("invalid-argument", "Missing meal plan inputs.");
+  try {
+    const recipesSnap = await db.collection("recipes").limit(7).get();
+    const mealPlan = recipesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return { success: true, mealPlan };
+  } catch (error) {
+    console.error("Error generating meal plan:", error);
+    throw new functions.https.HttpsError("internal", "Failed to generate meal plan.");
   }
-
-  const recipesSnap = await db.collection("recipes")
-    .where("calories", "<=", dailyCalories)
-    .get();
-
-  const filtered = recipesSnap.docs
-    .map(doc => doc.data())
-    .filter(recipe => matchesPreferences(recipe, preferences));
-
-  // Separate recipes by type
-  const breakfastOptions = filtered.filter(r => r.type === "breakfast");
-  const lunchOptions = filtered.filter(r => r.type === "lunch");
-  const dinnerOptions = filtered.filter(r => r.type === "dinner");
-
-  const pickRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
-
-  const weekPlan = Array.from({ length: 7 }, (_, i) => ({
-    day: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][i],
-    breakfast: pickRandom(breakfastOptions),
-    lunch: pickRandom(lunchOptions),
-    dinner: pickRandom(dinnerOptions)
-  }));
-
-  return { success: true, mealPlan: weekPlan };
 });
-
 
 // 🔢 Get Nutrition Stats
 const getNutritionStats = functions.https.onCall(async (data, context) => {
