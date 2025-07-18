@@ -1,34 +1,55 @@
-/* const functions = require("firebase-functions");
+const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const db = admin.firestore();
 
-function determineDietAndTags(ingredients = []) {
-  const allIngredients = ingredients.join(" ").toLowerCase();
-  const tags = [];
+// 🔍 Helper to classify meal type from title
+function classifyMealType(title = "") {
+  const t = title.toLowerCase();
 
-  let diet = null;
-  const nonVegetarian = ["chicken", "beef", "pork", "fish", "shrimp", "bacon"];
-  const nonVegan = ["egg", "cheese", "milk", "butter", "honey", "yogurt"];
-  const gluten = ["wheat", "flour", "bread", "pasta"];
-  const dairy = ["milk", "cheese", "butter", "cream", "yogurt"];
-
-  if (!nonVegetarian.some(item => allIngredients.includes(item))) {
-    diet = "vegetarian";
-    if (!nonVegan.some(item => allIngredients.includes(item))) {
-      diet = "vegan";
-    }
+  if (
+    t.includes("egg") || t.includes("pancake") || t.includes("oatmeal") || t.includes("toast") ||
+    t.includes("cereal") || t.includes("smoothie") || t.includes("bagel") || t.includes("breakfast")
+  ) {
+    return "breakfast";
+  } else if (
+    t.includes("salad") || t.includes("sandwich") || t.includes("wrap") || t.includes("bowl") ||
+    t.includes("burger") || t.includes("taco") || t.includes("lunch")
+  ) {
+    return "lunch";
+  } else if (
+    t.includes("pasta") || t.includes("chicken") || t.includes("steak") || t.includes("curry") ||
+    t.includes("rice") || t.includes("dinner") || t.includes("lasagna")
+  ) {
+    return "dinner";
   }
 
-  if (!gluten.some(item => allIngredients.includes(item))) {
-    tags.push("gluten-free");
-  }
-  if (!dairy.some(item => allIngredients.includes(item))) {
-    tags.push("dairy-free");
-  }
-
-  return { diet, tags };
+  return "unspecified"; // fallback
 }
 
+// 🍽️ Patch recipes to add mealType field
+const patchRecipesWithMealType = functions.https.onRequest(async (req, res) => {
+  try {
+    const snapshot = await db.collection("recipes").get();
+    const batch = db.batch();
+
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      const title = data.title || "";
+
+      const mealType = classifyMealType(title);
+      const ref = db.collection("recipes").doc(doc.id);
+      batch.update(ref, { mealType });
+    });
+
+    await batch.commit();
+    res.send("✅ Recipes successfully updated with mealType.");
+  } catch (error) {
+    console.error("❌ Error classifying meal types:", error);
+    res.status(500).send("Failed to update recipes with meal type.");
+  }
+});
+
+/* 
 const patchRecipesWithDietTags = functions.https.onRequest(async (req, res) => {
   try {
     const snapshot = await db.collection("recipes").get();
@@ -51,6 +72,9 @@ const patchRecipesWithDietTags = functions.https.onRequest(async (req, res) => {
     res.status(500).send("Failed to patch recipes.");
   }
 });
-
-module.exports = { patchRecipesWithDietTags };
 */
+
+module.exports = {
+  patchRecipesWithMealType,
+  // patchRecipesWithDietTags
+};
